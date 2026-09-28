@@ -1,0 +1,21 @@
+{
+  "name": "progweb-p1-geraldez-ribeiro",
+  "version": "1.0.0",
+  "description": "🛡️ Projeto RPG de Turnos em JavaScript (POO)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/geraldezjunior/progweb-p1-geraldez-ribeiro.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/geraldezjunior/progweb-p1-geraldez-ribeiro/issues"
+  },
+  "homepage": "https://github.com/geraldezjunior/progweb-p1-geraldez-ribeiro#readme"
+}
