@@ -1,12 +1,11 @@
+Aluno: Geraldez Ribeiro de Medeiros Junior
+Turno: Noturno
+
 🛡️ Projeto RPG de Turnos em JavaScript (POO)
 
 Bem-vindo ao repositório oficial do meu projeto de Programação Orientada a Objetos (POO) utilizando JavaScript!
 
 Este projeto foi desenvolvido com o objetivo de aplicar conceitos fundamentais de POO (como herança, encapsulamento, polimorfismo e abstração) em um cenário divertido e interativo: um Sistema de Batalha de RPG por Turnos.
-
-👨‍💻 Autor
-
-Nome: Geraldez Ribeiro de Medeiros Junior
 
 Objetivo: Praticar e consolidar os conceitos de Programação Orientada a Objetos com JavaScript puro (Vanilla JS).
 
