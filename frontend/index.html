@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RPG de Turnos · Painel</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="bg-body-tertiary">
+    <header class="navbar bg-dark" data-bs-theme="dark">
+      <div class="container">
+        <span class="navbar-brand mb-0 h1">RPG de Turnos · Painel</span>
+        <nav class="d-flex gap-3 small" aria-label="Seções">
+          <a class="link-light" href="#jogadores-titulo">Jogadores</a>
+          <a class="link-light" href="#personagens-titulo">Personagens</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container py-4">
+      <!-- ===================== JOGADORES (entidade pai) ===================== -->
+      <section class="mb-5" aria-labelledby="jogadores-titulo">
+        <h1 id="jogadores-titulo" class="h3 mb-3">Jogadores</h1>
+
+        <!-- Feedback das ações (sucesso ou erro de regra vindo da API) -->
+        <div id="jogadores-aviso" aria-live="polite"></div>
+
+        <div class="row g-4">
+          <div class="col-lg-4">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h2 id="jogador-form-titulo" class="h5 card-title">Novo jogador</h2>
+                <form id="jogador-form">
+                  <div class="mb-3">
+                    <label for="jogador-nome" class="form-label">Nome</label>
+                    <input id="jogador-nome" name="nome" type="text" class="form-control" required maxlength="100" autocomplete="off" />
+                  </div>
+                  <div class="mb-3">
+                    <label for="jogador-nick" class="form-label">Nick</label>
+                    <input id="jogador-nick" name="nick" type="text" class="form-control" required autocomplete="off" aria-describedby="jogador-nick-ajuda" />
+                    <div id="jogador-nick-ajuda" class="form-text">3 a 20 caracteres: letras, números ou _. Único.</div>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <button id="jogador-salvar" type="submit" class="btn btn-primary">Cadastrar</button>
+                    <button id="jogador-cancelar" type="button" class="btn btn-outline-secondary" hidden>Cancelar edição</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-8">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h2 class="h5 card-title mb-0">Lista de jogadores</h2>
+                  <button id="jogadores-recarregar" type="button" class="btn btn-sm btn-outline-primary">Recarregar</button>
+                </div>
+
+                <!-- Estado 1: carregando -->
+                <div id="jogadores-carregando" class="estado text-center text-body-secondary">
+                  <div class="spinner-border spinner-border-sm me-2" aria-hidden="true"></div>
+                  <span role="status">Carregando jogadores…</span>
+                </div>
+
+                <!-- Estado 2: vazio -->
+                <div id="jogadores-vazio" class="estado text-center text-body-secondary" hidden>
+                  Nenhum jogador cadastrado ainda. Use o formulário para cadastrar o primeiro.
+                </div>
+
+                <!-- Estado 3: erro -->
+                <div id="jogadores-erro" class="alert alert-danger" role="alert" hidden>
+                  <p class="mb-2"><strong>Não foi possível carregar os jogadores.</strong> <span id="jogadores-erro-msg"></span></p>
+                  <button id="jogadores-tentar" type="button" class="btn btn-sm btn-danger">Tentar de novo</button>
+                </div>
+
+                <!-- Estado 4: sucesso -->
+                <div id="jogadores-sucesso" class="table-responsive" hidden>
+                  <table class="table table-hover align-middle mb-0">
+                    <thead>
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Nick</th>
+                        <th scope="col">Personagens</th>
+                        <th scope="col" class="text-end">Ações</th>
+                      </tr>
+                    </thead>
+                    <tbody id="jogadores-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PERSONAGENS (entidade filha: pertence a um jogador) ============ -->
+      <section aria-labelledby="personagens-titulo">
+        <h1 id="personagens-titulo" class="h3 mb-3">Personagens</h1>
+
+        <div id="personagens-aviso" aria-live="polite"></div>
+
+        <div class="row g-4">
+          <div class="col-lg-4">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h2 id="personagem-form-titulo" class="h5 card-title">Novo personagem</h2>
+                <form id="personagem-form">
+                  <div class="mb-3">
+                    <label for="personagem-jogador" class="form-label">Jogador</label>
+                    <select id="personagem-jogador" name="jogadorId" class="form-select" required>
+                      <option value="">Carregando jogadores…</option>
+                    </select>
+                    <div id="personagem-jogador-ajuda" class="form-text text-warning-emphasis" hidden>
+                      Todo personagem pertence a um jogador: cadastre um jogador acima.
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="personagem-nome" class="form-label">Nome</label>
+                    <input id="personagem-nome" name="nome" type="text" class="form-control" required maxlength="50" autocomplete="off" />
+                  </div>
+                  <div class="row g-2 mb-3">
+                    <div class="col-7">
+                      <label for="personagem-classe" class="form-label">Classe</label>
+                      <select id="personagem-classe" name="classe" class="form-select" required>
+                        <option value="guerreiro">Guerreiro</option>
+                        <option value="mago">Mago</option>
+                      </select>
+                    </div>
+                    <div class="col-5">
+                      <label for="personagem-nivel" class="form-label">Nível</label>
+                      <input id="personagem-nivel" name="nivel" type="number" class="form-control" required value="1" step="1" aria-describedby="personagem-nivel-ajuda" />
+                    </div>
+                  </div>
+                  <div id="personagem-nivel-ajuda" class="form-text mb-3">Nível de 1 a 100. HP, MP, ataque e defesa vêm da classe.</div>
+                  <div class="d-flex gap-2">
+                    <button id="personagem-salvar" type="submit" class="btn btn-primary">Cadastrar</button>
+                    <button id="personagem-cancelar" type="button" class="btn btn-outline-secondary" hidden>Cancelar edição</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-8">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
+                  <h2 class="h5 card-title mb-0">Lista de personagens</h2>
+                  <div class="d-flex gap-2">
+                    <label for="personagens-filtro" class="visually-hidden">Filtrar por jogador</label>
+                    <select id="personagens-filtro" class="form-select form-select-sm w-auto">
+                      <option value="">Todos os jogadores</option>
+                    </select>
+                    <button id="personagens-recarregar" type="button" class="btn btn-sm btn-outline-primary">Recarregar</button>
+                  </div>
+                </div>
+
+                <!-- Estado 1: carregando -->
+                <div id="personagens-carregando" class="estado text-center text-body-secondary">
+                  <div class="spinner-border spinner-border-sm me-2" aria-hidden="true"></div>
+                  <span role="status">Carregando personagens…</span>
+                </div>
+
+                <!-- Estado 2: vazio -->
+                <div id="personagens-vazio" class="estado text-center text-body-secondary" hidden>
+                  <span id="personagens-vazio-msg">Nenhum personagem cadastrado ainda.</span>
+                </div>
+
+                <!-- Estado 3: erro -->
+                <div id="personagens-erro" class="alert alert-danger" role="alert" hidden>
+                  <p class="mb-2"><strong>Não foi possível carregar os personagens.</strong> <span id="personagens-erro-msg"></span></p>
+                  <button id="personagens-tentar" type="button" class="btn btn-sm btn-danger">Tentar de novo</button>
+                </div>
+
+                <!-- Estado 4: sucesso -->
+                <div id="personagens-sucesso" class="table-responsive" hidden>
+                  <table class="table table-hover align-middle mb-0">
+                    <thead>
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Classe</th>
+                        <th scope="col">Nível</th>
+                        <th scope="col">Jogador</th>
+                        <th scope="col" title="HP / MP / Ataque / Defesa">HP / MP / ATQ / DEF</th>
+                        <th scope="col" class="text-end">Ações</th>
+                      </tr>
+                    </thead>
+                    <tbody id="personagens-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
