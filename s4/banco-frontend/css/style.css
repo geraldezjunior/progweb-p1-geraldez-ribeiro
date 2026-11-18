@@ -1,0 +1,22 @@
+/* Ajustes finos por cima do Bootstrap. Genérico: vale para qualquer entidade. */
+
+/* Blocos de estado (carregando / vazio) com a mesma altura, para a tela não "pular". */
+.estado {
+  padding: 2.5rem 1rem;
+  border: 1px dashed var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+}
+
+/* Formulário acompanha a rolagem em telas grandes. */
+@media (min-width: 992px) {
+  .col-lg-4 > .card {
+    position: sticky;
+    top: 1rem;
+  }
+}
+
+/* Colunas numéricas e de ações não quebram linha. */
+td:first-child {
+  width: 4rem;
+  font-variant-numeric: tabular-nums;
+}
