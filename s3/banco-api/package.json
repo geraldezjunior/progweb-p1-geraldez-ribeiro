@@ -1,12 +1,12 @@
 {
   "name": "banco-api",
   "version": "1.0.0",
-  "description": "API bancária em camadas (S3)",
-  "main": "server.js",
+  "description": "API bancária em camadas com SQLite (S5)",
+  "main": "src/server.js",
   "type": "module",
   "scripts": {
-    "dev": "node --watch server.js",
-    "start": "node server.js"
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js"
   },
   "keywords": [],
   "author": "Geraldez Junior",
