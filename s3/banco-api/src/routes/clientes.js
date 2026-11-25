@@ -1,6 +1,5 @@
-// Route: só mapeia método + caminho para a função do controller.
 import { Router } from 'express';
-import * as clienteController from '../controllers/clienteController.js';
+import { clienteController } from '../controllers/clienteController.js';
 
 const router = Router();
 
